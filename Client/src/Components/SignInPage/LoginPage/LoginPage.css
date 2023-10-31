@@ -1,0 +1,21 @@
+*{
+    padding:0px;
+    margin:0px;
+}
+.background {
+    background-image: url('./motherbackground.png'); 
+    background-size: cover;
+    background-position: center;
+    background-attachment: fixed;
+    min-height: 100vh;
+    position: relative;
+    
+}
+
+.logo{
+    object-fit: contain;
+    width:150px;
+    height: 100px;
+    z-index: 100;
+    align-self: flex-start;
+}

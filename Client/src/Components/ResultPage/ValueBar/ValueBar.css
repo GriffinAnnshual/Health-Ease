@@ -1,0 +1,35 @@
+.value-container{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width:490px;
+    height: 100px;
+}
+.label{
+    color:#8A2C2C;
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 800;
+    font-size:20px;
+}
+.btn{
+    border:none;
+    width:290px;
+    height: 45px;
+    box-shadow: 0px 4px 4px 0px #00000040;
+    border-radius: 10px;
+    position: relative;
+} 
+.unit{
+    color:#8A2C2C;
+    font-size: 20px;
+    font-weight: 900;
+   position: absolute;
+    
+   right:9px;
+   bottom:9px;
+}
+.value{
+    font-size:25px;
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 600;
+}

@@ -1,0 +1,9 @@
+*{
+    margin:0px;
+}
+.register-page{
+    background-color: #FFC9C9;
+    width:100%;
+    height: 100vh;
+    display: flex;
+}

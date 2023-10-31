@@ -1,0 +1,22 @@
+.login-btn{
+    width:170px;
+    height: 45px;
+    border-radius: 10px;
+    border: none;
+    text-align: center;
+    font-family: 'Inter', sans-serif;
+    font-weight: 400;
+    font-size: 18px;
+    background-color: #8A2C2C;
+    color:white;
+    letter-spacing: 3px;
+    box-shadow: 0px 4px 4px 0px #00000040;
+    transition: opacity 0.25s;
+
+}
+.login-btn:hover{
+    opacity: 0.8;
+}
+.login-btn:active{
+    opacity: 0.5;
+}

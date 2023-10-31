@@ -1,0 +1,14 @@
+.info-heading{
+    width:800px;
+    height:150px;
+    font-size:50px;
+    font-weight:900;
+    color:#8A2C2C;
+    font-family: 'Montserrat', sans-serif;
+    text-align: center;
+    line-height: 65px;
+    /* display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center; */
+  }
