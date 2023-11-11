@@ -8,6 +8,13 @@ import bcrypt from "bcrypt";
 const app = express();
 app.use(express.json());
 app.use(cors());
+import OpenAI from "openai"
+import sbd from "sbd"
+
+const apiKey = process.env.API_KEY // Replace with your OpenAI API key
+const openai = new OpenAI({ apiKey: apiKey })
+
+
 import { MongoClient } from "mongodb"
 import fs from "fs";
 
@@ -205,23 +212,48 @@ app.get("/getUser", async (req, res) => {
 })
 
 
-app.get("/getDietPlan", (req, res) => {
-	const HealthyFood = [[
-		"Healthy food choices are essential for maintaining overall well-being and promoting optimal physical and mental health. A balanced diet is characterized by a variety of nutrient-rich foods that provide the body with the vitamins, minerals, and energy it needs to function effectively. Fruits and vegetables, such as leafy greens, colorful berries, and cruciferous vegetables, offer a plethora of essential nutrients, antioxidants, and fiber that support various bodily functions. These foods can help reduce the risk of chronic diseases, including heart disease and certain types of cancer.",
-		"Whole grains, like brown rice, whole wheat, and quinoa, are rich in complex carbohydrates and fiber, offering sustained energy and aiding in digestion. Lean sources of protein, such as lean meats, fish, poultry, tofu, and legumes, are crucial for muscle maintenance and repair, as well as immune function. Healthy fats from sources like avocados, nuts, and olive oil are vital for brain health and the absorption of fat-soluble vitamins. Additionally, incorporating dairy products or dairy alternatives into the diet provides essential calcium for strong bones and teeth.",
-		"A well-balanced diet also extends to what we drink. Staying hydrated with water is fundamental for bodily functions, including digestion, circulation, and temperature regulation. Limiting the intake of added sugars, sugary beverages, and processed foods is crucial in preventing excessive calorie consumption and the associated risks of obesity and related health conditions. Healthy food choices not only impact physical health but also contribute to mental well-being, as proper nutrition can enhance mood, cognitive function, and overall vitality. Making mindful choices in our daily diet can lead to a healthier and more fulfilling life."
-	],[
-	"Avoid processed foods high in added sugars and unhealthy fats for better health. These items lead to weight gain and chronic diseases.",
-	"Steer clear of sugary drinks like soda and fruit juices. They contribute to weight gain and dental issues.",
-	"Limit excessive caffeine from energy drinks, and consider abstaining from alcohol when it poses health risks, especially during pregnancy. Responsible choices impact overall well-being."
+app.get("/getDietPlan", async(req, res) => {
 
-	]
-	]
-res.status(200).json(HealthyFood)
+
+// Add a default prompt sentence
+const defaultPrompt = "Generate the response as coherrent sentences. "
+
+// Your specific prompt
+const customPrompt = "I want you to act as an AI assisted doctor. I am a pregnant women give me suggestions for healthy food habits in 10 sentences."
+
+const generateSentences = async() => {
+		const completionResponse = await openai.completions.create({
+		model: "text-davinci-003",
+		prompt: `${defaultPrompt} ${customPrompt}`,
+		max_tokens: 250,
+	})
+
+	const id = completionResponse["id"];
+	const text = completionResponse["choices"][0]["text"];
+	const sentences = sbd.sentences(text)
+	return sentences
+}
+
+// Example usage
+generateSentences()
+	.then((sentences) => {
+		
+			const middleIndex = Math.floor(sentences.length / 2)
+			const firstHalf = sentences.slice(0, middleIndex)
+			const secondHalf = sentences.slice(middleIndex)
+
+			return [firstHalf, secondHalf]
+	})
+	.catch((error) => {
+		console.error("Error:", error)
+	})
+
+const dietPlan = generateSentences();
+
+  
+res.status(200).json({dietPlan})
 
 })
-
-
 
 
 

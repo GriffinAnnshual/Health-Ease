@@ -54,12 +54,20 @@
 
 }
 .health-condition-header{
+
     color:#8A2C2C;
     font-size:20px;
     font-weight: 800;
     text-align: center;
     margin-top:30px;
     font-family: 'Montserrat', sans-serif;
+}
+.result{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: absolute;
+    right: 60%;
 }
 .round{
     width:60px;
@@ -98,6 +106,7 @@
     display: inline;
 }
 #risk{
+    
     color:#8A2C2C;
     font-size: 20px;
     position: relative;

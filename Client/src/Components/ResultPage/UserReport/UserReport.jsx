@@ -1,18 +1,17 @@
-import React, { useState, useEffect } from "react"
+import React, { Suspense,useState, useEffect } from "react"
 import "./UserReport.css"
 import ValueBar from "../ValueBar/ValueBar"
 import Button from "../../SignInPage/Button/Button"
 import axios from "axios"
-import { useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom"
 
-  
 const UserReport = () => {
-	  const navigate = useNavigate()
-		const handleClick = () => {
-			navigate("/health")
-		}
+	const navigate = useNavigate()
+	const handleClick = () => {
+		navigate("/health")
+	}
 	const [Readings, setReadings] = useState([]) // Use React state to store Readings
-
+	const [loading, setLoading] = useState(true)
 	useEffect(() => {
 		const getUserDetails = async () => {
 			try {
@@ -33,7 +32,7 @@ const UserReport = () => {
 
 				// Set the Readings state with the populated values
 				setReadings(readingsData)
-
+				setLoading(false)
 				return {
 					height: result.height,
 					weight: result.weight,
@@ -45,6 +44,7 @@ const UserReport = () => {
 					oxygen: result.oxygen,
 				}
 			} catch (err) {
+				setLoading(false)
 				console.error(err)
 				throw err // Re-throw the error to handle it outside this function
 			}
@@ -52,25 +52,70 @@ const UserReport = () => {
 
 		getUserDetails()
 	}, [])
-	
+
+	if (loading) {
+		return (
+			<div class="report-page">
+				<div className="report-container">
+					<div className="report-inner-container">
+						{Readings.map((values) => {
+							return (
+								<Suspense
+									fallback={
+										<ValueBar
+											key={"id"}
+											label={"Loading..."}
+											value={"Loading..."}
+											unit={"Loading..."}
+										/>
+									}>
+
+									</Suspense>
+							)
+						})}
+					</div>
+				</div>
+				<div className="save-btn-space">
+					<Button
+						tag="SAVE"
+						value={handleClick}
+					/>
+				</div>
+			</div>
+		)
+	}
+
 	return (
 		<div class="report-page">
 			<div className="report-container">
 				<div className="report-inner-container">
 					{Readings.map((values) => {
 						return (
-							<ValueBar
-								key={values.id}
-								label={values.label || "Loading..."}
-								value={values.value || "Loading..."}
-								unit={values.unit}
-							/>
+							<Suspense
+								fallback={
+									<ValueBar
+										key={"id"}
+										label={"Loading..."}
+										value={"Loading..."}
+										unit={"Loading..."}
+									/>
+								}>
+								<ValueBar
+									key={values.id}
+									label={values.label}
+									value={values.value}
+									unit={values.unit}
+								/>
+							</Suspense>
 						)
 					})}
 				</div>
 			</div>
 			<div className="save-btn-space">
-				<Button tag="SAVE" value={handleClick}/>
+				<Button
+					tag="SAVE"
+					value={handleClick}
+				/>
 			</div>
 		</div>
 	)

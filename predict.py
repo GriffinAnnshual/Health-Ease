@@ -355,7 +355,7 @@ def predict_json_endpoint():
     diastolic_pressure_message = {"value":diastolic_pressure ,"message": "","short":""}
     diastolic_pressure_message["message"],diastolic_pressure_message["short"] = PRESSURE_calculator_D(diastolic_pressure_message)
 
-    blood_sugar = (record2["glucose"]) * 0.0555
+    blood_sugar = record2["glucose"]
     blood_sugar_message = {"value":blood_sugar ,"message": "","short":""}
     blood_sugar_message["message"],blood_sugar_message["short"] = SUGAR_calculator(blood_sugar_message)
 

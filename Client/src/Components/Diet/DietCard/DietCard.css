@@ -9,6 +9,7 @@
     border-radius: 10px;
 }
 .diet-para{
+    align-self: flex-start;
     color: #8A2C2C;
     font-family: 'Montserrat', sans-serif;
     font-size:18px;
@@ -24,11 +25,14 @@
     align-self: center;
 }
 .diet-para-container{
-   
+
     width: 80%;
     height: 75%;
     display: flex;
     flex-direction: column;
     justify-content: space-around;
-    align-items: center;
+}
+
+.diet-para p{
+    align-self:auto important;
 }

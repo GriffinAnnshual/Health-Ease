@@ -10,14 +10,24 @@
     border-radius: 10px;
 }
 .Trimester-box{
+    display: flex;
+    flex-direction: column;
+    justify-content: space-evenly;
+    align-items: center;
     width:500px;
     height: 400px;
     background-color: #FFFFFF94;
     border-radius: 10px;
 }
+.weeks{
+    font-size: 8rem;
+}
 .heading{
-    text-align: center;
-    font-size:22px;
+    position: absolute;
+    margin-right: 11%;
+    margin-bottom: 4%;
+    align-items: center;
+    font-size:30px;
     color:#8A2C2C;
     font-weight: 600;
     font-family: 'Montserrat', sans-serif;
