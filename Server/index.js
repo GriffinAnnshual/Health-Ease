@@ -215,40 +215,63 @@ app.get("/getUser", async (req, res) => {
 app.get("/getDietPlan", async(req, res) => {
 
 
-// Add a default prompt sentence
-const defaultPrompt = "Generate the response as coherrent sentences. "
+const food_suggestions = [
+	"Leafy Greens: Support overall health, potentially aiding in controlling blood pressure and reducing the risk of preeclampsia.",
+	"Berries: Rich in antioxidants and fiber, may contribute to stable blood sugar levels, helping prevent gestational diabetes.",
+	"Salmon: A great source of omega-3 fatty acids, supporting cardiovascular health and potentially reducing the risk of preterm labor.",
+	"Nuts and Seeds: High in omega-3s, fiber, and essential nutrients, can help maintain steady blood sugar levels and support overall well-being.",
+	"Beans and Legumes: Packed with fiber and protein, contribute to blood sugar control and may reduce the risk of gestational diabetes.",
+	"Avocado: Rich in healthy fats, provides essential nutrients and may support cardiovascular health, potentially helping to regulate blood pressure.",
+	"Whole Grains: High in fiber and complex carbohydrates, contribute to stable blood sugar levels and may reduce the risk of gestational diabetes.",
+	"Greek Yogurt: A good source of protein and probiotics, supports digestive health, potentially reducing the risk of infections."
+]
 
-// Your specific prompt
-const customPrompt = "I want you to act as an AI assisted doctor. I am a pregnant women give me suggestions for healthy food habits in 10 sentences."
+const middleIndex = Math.floor(food_suggestions.length / 2)
+const firstHalf = food_suggestions.slice(0, middleIndex)
+const secondHalf = food_suggestions.slice(middleIndex)
 
-const generateSentences = async() => {
-		const completionResponse = await openai.completions.create({
-		model: "text-davinci-003",
-		prompt: `${defaultPrompt} ${customPrompt}`,
-		max_tokens: 250,
-	})
+const dietPlan =  [firstHalf, secondHalf]
 
-	const id = completionResponse["id"];
-	const text = completionResponse["choices"][0]["text"];
-	const sentences = sbd.sentences(text)
-	return sentences
-}
+// // Add a default prompt sentence
+// const defaultPrompt = "Generate the response as coherrent sentences. "
 
-// Example usage
-generateSentences()
-	.then((sentences) => {
+// // Your specific prompt
+// const customPrompt = `
+// These are the pregnancy complications that pregnant women can face : High Blood Pressure, Gestational Diabetes, Infections ,Preeclampsia ,Preterm Labor,Depression & Anxiety, Pregnancy Loss/Miscarriage, Stillbirth. As a Doctor suggest some good food habit for the women to keep in control their Oxygen level, Blood pressure, Blood Sugar, Pulse etc.. .And avoid the above complications.  Eg: "Eat 8 to 12 ounces of seafood each week", Don’t eat certain foods.
+// These foods may have bacteria in them that can hurt your baby. Stay away from:
+// Raw (uncooked) or rare (undercooked) fish or shellfish, like sushi or raw oysters
+// Raw or rare meats, poultry, or eggs
+// Unpasteurized juice, milk, or cheese — make sure it says “pasteurized” on the label
+// Lunch or deli meats, smoked seafood, and hot dogs — unless they’re heated until" . Similarly Generate 10 points .  Format <Food> <Their Benefits> . Don't describe each of it . I need as a single sentence `
+//
+// const generateSentences = async() => {
+// 		const completionResponse = await openai.completions.create({
+// 		model: "text-davinci-003",
+// 		prompt: `${defaultPrompt} ${customPrompt}`,
+// 		max_tokens: 250,
+// 	})
+
+// 	const id = completionResponse["id"];
+// 	const text = completionResponse["choices"][0]["text"];
+// 	const sentences = sbd.sentences(text)
+// 	return sentences
+// }
+
+// // Example usage
+// generateSentences()
+// 	.then((sentences) => {
 		
-			const middleIndex = Math.floor(sentences.length / 2)
-			const firstHalf = sentences.slice(0, middleIndex)
-			const secondHalf = sentences.slice(middleIndex)
+			// const middleIndex = Math.floor(sentences.length / 2)
+			// const firstHalf = sentences.slice(0, middleIndex)
+			// const secondHalf = sentences.slice(middleIndex)
 
-			return [firstHalf, secondHalf]
-	})
-	.catch((error) => {
-		console.error("Error:", error)
-	})
+			// return [firstHalf, secondHalf]
+// 	})
+// 	.catch((error) => {
+// 		console.error("Error:", error)
+// 	})
 
-const dietPlan = generateSentences();
+// const dietPlan = generateSentences();
 
   
 res.status(200).json({dietPlan})

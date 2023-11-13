@@ -372,7 +372,6 @@ def predict_json_endpoint():
     curr_week = calculate_current_week(lmp_date)
 
     output = {"RiskLevel": risk,"BMI":bmi_message,"Oxygen":oxygen_message,"systolic_pressure":systolic_pressure_message,"diastolic_pressure": diastolic_pressure_message,"blood_sugar": blood_sugar_message,"pulse": pulse_message,"temperature":temperature_message,"curr_week":curr_week }
-
     return jsonify(output , json.dumps(record2,default=str))   
 
 

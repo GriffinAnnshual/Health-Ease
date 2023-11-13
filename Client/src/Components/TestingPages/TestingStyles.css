@@ -91,12 +91,9 @@
     font-weight:600;
     border:none;
     background-color:#FFC9C9;
-    transition: opacity 0.25s;
     position: relative;
     top:30px;
     left:580px;
-    display: inline;
-    transition: opacity 0.25s;
 }
 .logout-btn-test:hover{
     text-decoration: underline;
@@ -106,6 +103,7 @@
 .logout-btn-test:active{
     opacity: 0.4;
 }
+
 .reader-container-2{
     background-color: #FFFDFDA6;
     width: 400px;
