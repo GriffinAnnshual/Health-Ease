@@ -23,9 +23,14 @@ const UserDetails = () => {
 	const [userDetails, setUserDetails] = useState(null)
 	const [loading, setLoading] = useState(true)
 	useEffect(() => {
+		const token = localStorage.getItem("jwt_token")
+		const headers = {
+			Authorization: `Bearer ${token}`,
+			"Content-Type": "application/json",
+		}
 		const fetchData = async () => {
 			try {
-				const res = await axios.get("http://localhost:3001/getUser")
+				const res = await axios.get("http://localhost:3001/getUser",{headers})
 				setUserDetails(res.data.user)
 				console.log(userDetails)
 				setLoading(false)

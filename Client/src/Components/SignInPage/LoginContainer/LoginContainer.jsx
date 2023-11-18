@@ -5,27 +5,24 @@ import RegisterText from "../RegisterText/RegisterText"
 import Button from "../Button/Button"
 import axios from "axios"
 import { useNavigate } from "react-router-dom"
+
 const LoginContainer = () => {
 	const navigate = useNavigate()
 	const [name, setName] = useState("") // Fix the typo here
 	const [password, setPassword] = useState("")
 
-	const token = process.env.REACT_APP_JWT_SECRET
-	const headers = {
-		Authorization: `Bearer ${token}`,
-		"Content-Type": "application/json",
-	}
 	const handleSubmit = (e) => {
 		e.preventDefault()
 		console.log("username - " + name)
 		console.log("password - " + password)
 		axios
-			.post("http://localhost:3001/login", { name, password }, { headers })
+			.post("http://localhost:3001/login", { name, password })
 			.then((result) => {
+				console.log("got response :")
 				console.log(result)
-
 				alert("Login successful!")
 				navigate("/test-1")
+				localStorage.setItem("jwt_token",toString(result.data.token))
 			})
 			.catch((err) => {
 				alert("Invalid Password or Username!")

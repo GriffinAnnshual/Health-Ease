@@ -141,9 +141,10 @@ else{
 });
 
 const generateToken = (id) => {
-	return jwt.sign({id},process.env.JWT_SECRET,{
-		expiresIn: "10d"
+	const jwt_token = jwt.sign({ id }, process.env.JWT_SECRET, {
+		expiresIn: "10d",
 	})
+	return jwt_token;
 }
 
 app.get("/me", async(req,res)=>{
@@ -175,7 +176,8 @@ const collection = db.collection("Readings");
 	return res.status(200).json({ document})
 })
 
-app.get("/getUser", async (req, res) => {
+app.get("/getUser",auth, async (req, res) => {
+
 	const url = process.env.ATLAS_SECRET
 	const client = new MongoClient(url, {
 		useNewUrlParser: true,
@@ -212,7 +214,7 @@ app.get("/getUser", async (req, res) => {
 })
 
 
-app.get("/getDietPlan", async(req, res) => {
+app.get("/getDietPlan",auth, async(req, res) => {
 
 
 const food_suggestions = [

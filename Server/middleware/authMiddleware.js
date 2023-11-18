@@ -2,9 +2,10 @@ import RegisterModel from "../Models/UserCredentials.js"
 import jwt from "jsonwebtoken"
 
 const auth = async (req, res, next) => {
-	const authheader = req.headers.authorization
+	const authheader = req.config.headers.Authorization
+    console.log(authheader)
     const token = authheader.split(" ")[1];
-    if (token == null) return res.sendStatus(401) 
+    if (token == null) return res.sendStatus(401).json({"message":"token not found"})
     else{
     console.log(token)
     const decode = jwt.verify(token, process.env.JWT_SECRET)

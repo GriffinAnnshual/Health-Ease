@@ -12,11 +12,17 @@ const DietPage = () => {
 	const [loading, setLoading] = useState(true)
 	const [newData, setData ] = useState([])
 
+	const token = localStorage.getItem("jwt_token")
+	const headers = {
+		Authorization: `Bearer ${token}`,
+		"Content-Type": "application/json",
+	}
+
 	useEffect(() => {
 		// Inside useEffect, make the API call and update the data when the component mounts
 		const fetchData = async () => {
 			try {
-				const res = await axios.get("http://localhost:3001/getDietPlan");
+				const res = await axios.get("http://localhost:3001/getDietPlan",{headers});
 				const apiData = res.data.dietPlan;
 				console.log(apiData)
 
