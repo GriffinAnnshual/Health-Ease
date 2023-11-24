@@ -8,14 +8,22 @@ import { useNavigate } from "react-router-dom"
 const UserReport = () => {
 	const navigate = useNavigate()
 	const handleClick = () => {
-		navigate("/health")
+		navigate("/health")	
 	}
 	const [Readings, setReadings] = useState([]) // Use React state to store Readings
 	const [loading, setLoading] = useState(true)
 	useEffect(() => {
+		if(!localStorage.getItem("jwt_token")){
+					navigate("/login")
+				}
 		const getUserDetails = async () => {
+			const token = localStorage.getItem("jwt_token")
+			const headers = {
+				"Authorization": `Bearer ${token}`,
+				"Content-Type": "application/json"
+			}
 			try {
-				const res = await axios.get("http://localhost:3001/getUserDetails")
+				const res = await axios.get("http://localhost:3001/getUserDetails",{headers})
 				const results = JSON.parse(res.request.response)
 				const result = results.document
 				console.log(result)
@@ -46,7 +54,6 @@ const UserReport = () => {
 			} catch (err) {
 				setLoading(false)
 				console.error(err)
-				throw err // Re-throw the error to handle it outside this function
 			}
 		}
 

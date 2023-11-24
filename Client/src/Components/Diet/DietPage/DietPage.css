@@ -43,6 +43,7 @@
     display: inline-block;
 }  
 .diet-nav{
+    z-index:10;
     display: inline-block;
     position: relative;
     left:1350px;

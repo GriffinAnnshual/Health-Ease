@@ -137,6 +137,7 @@
     display:inline-block;
 }
 .health-logout-nav{
+    z-index:10;
     color:#8A2C2C;
     font-size: 20px;
     font-weight: 600;

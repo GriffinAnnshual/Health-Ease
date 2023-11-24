@@ -3,15 +3,21 @@ import "./TestingStyles.css";
 import Reading from "./Reading/Reading";
 import Instruction from "./Instruction/Instruction";
 import { useNavigate } from "react-router-dom";
-
+import { useEffect } from "react"
 const TestingPage3 = () => {
   const navigate = useNavigate();
   const handleClick = () => {
     navigate("/test-4");
   };
   const handleLogout = () => {
+    localStorage.removeItem("jwt_token")
     navigate("/login");
   };
+  useEffect(() => {
+		if (!localStorage.getItem("jwt_token")) {
+			navigate("/login")
+		}
+	}, [])
   return (
     <div class="test-page">
       <div class="test-left-side">

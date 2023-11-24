@@ -9,6 +9,7 @@ const NavButton=(props)=>{
             navigate("/");
         }
         else if(props.tag==="LOGOUT"){
+            localStorage.removeItem("jwt_token")
             navigate("/login");
         }
     }

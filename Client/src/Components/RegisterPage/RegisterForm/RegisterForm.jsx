@@ -4,6 +4,7 @@ import LoginInput from "../../SignInPage/LoginInput/LoginInput"
 import Button from "../../SignInPage/Button/Button"
 import axios from "axios"
 import { useNavigate } from "react-router-dom"
+
 const RegisterForm = () => {
 	const navigate = useNavigate()
 	const [name, setName] = useState("")
@@ -14,10 +15,6 @@ const RegisterForm = () => {
 	const [confirmPassword, setConfirmPassword] = useState("")
 	const [Age, setAge] = useState("")
 	const token = process.env.REACT_APP_JWT_SECRET
-	const headers = {
-		Authorization: `Bearer ${token}`,
-		"Content-Type": "application/json",
-	}
 	const handleSubmit = (e) => {
 		e.preventDefault()
 		console.log(
@@ -47,17 +44,19 @@ const RegisterForm = () => {
 					menstrualPeriod,
 					password,
 					confirmPassword,
-				},
-				{ headers }
+				}
 			)
 			.then((result) => {
-				console.log(result.request.response)
-				if (result.request.response.length > 40) {
+				if (result.request.response.length > 250) {
 					alert("User already exists with this Username or Aadhar or PhoneNo! ")
 				} else {
 					if (result.request.response.includes("0_credential")) {
 						alert("Password and Confirm password do not match!")
 					} else {
+						localStorage.setItem(
+							"jwt_token",
+							JSON.parse(result.request.response).token
+						)
 						alert("Registration Successfull!")
 						navigate("/login")
 					}
@@ -72,6 +71,7 @@ const RegisterForm = () => {
 				className="register-form"
 				onSubmit={handleSubmit}>
 				<LoginInput
+				
 					value={name}
 					valueChanger={setName}
 					placeholder="NAME"

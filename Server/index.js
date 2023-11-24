@@ -8,6 +8,7 @@ import bcrypt from "bcrypt";
 const app = express();
 app.use(express.json());
 app.use(cors());
+
 import OpenAI from "openai"
 import sbd from "sbd"
 
@@ -20,6 +21,9 @@ import fs from "fs";
 
 import jwt  from "jsonwebtoken";
 import auth from "./middleware/authMiddleware.js"
+
+
+// Your routes and other middleware
 
 const uri = process.env.ATLAS_SECRET;
 mongoose.connect(uri)
@@ -71,6 +75,7 @@ app.post("/register", async(req, res) => {
 			const key = await bcrypt.genSalt(10)
 			const hashPassword = await bcrypt.hash(password, key)
 			req.body.password = hashPassword
+			req.body.confirmPassword  = hashPassword
 			RegisterModel.create(req.body)
 				.then(() => {
 					console.log("Registered")
@@ -79,14 +84,25 @@ app.post("/register", async(req, res) => {
 	}
 
 	} 
-
-
-res.json({"userExists": usernameExists + useraadharExists + userphoneExists + credential+"_"+"credential"});
+const user = await RegisterModel.findOne({ name: name }).exec()
+console.log(user._id)
+res.json({
+	userExists:
+		usernameExists +
+		useraadharExists +
+		userphoneExists +
+		credential +
+		"_" +
+		"credential",
+	token: generateToken(user._id),
+})
 });
 
 
+app.get("/login",auth, (req, res) => {
+res.status(200).json({"message":"Login successful"})
+})
 
-let current = {};
 
 app.post("/login", async (req, res) => {
 	while (!connection) {
@@ -100,44 +116,11 @@ app.post("/login", async (req, res) => {
 	console.log(user)
 
 if (user && await bcrypt.compare(req.body.password,user.password)) {
-	res.json({
-		_id: user._id,
-		name:user.name,
-		aadhar: user.AadharNumber,
-		phone: user.phoneNumber,
-		token: generateToken(user._id),
-		status: "Login successful"
-	})
-	console.log({
-		_id: user._id,
-		name: user.name,
-		aadhar: user.AadharNumber,
-		phone: user.phoneNumber,
-		token: generateToken(user._id),
-		status: "Login successful",
-	})
-
-	const dataToStore = {
- 	 name: name
-};
-const jsonData = JSON.stringify(dataToStore);
-const filePath = 'user.json';
-fs.writeFile(filePath, jsonData, (err) => {
-  if (err) {
-    console.error('Error writing to JSON file:', err);
-  } else {
-    console.log('Data has been written to the JSON file.');
-  }
-});
-
+res.status(200).json({ message: "Login successful", token: generateToken(user.id)})
 }
 else{
-
-	res.status(404).json({msg: "Invalid User Data"})
-
+	res.status(401).json({"message": "Invalid User Credentials"})
 }
-
-
 });
 
 const generateToken = (id) => {
@@ -154,7 +137,7 @@ return res.status(200).json({_id,name,aadhar,phone})
 
 
 app.get("/getUserDetails", async(req, res) => {
-
+console.log("inside")
 const url = process.env.ATLAS_SECRET
 const client = new MongoClient(url, {
 	useNewUrlParser: true,
@@ -177,41 +160,16 @@ const collection = db.collection("Readings");
 })
 
 app.get("/getUser",auth, async (req, res) => {
-
-	const url = process.env.ATLAS_SECRET
-	const client = new MongoClient(url, {
-		useNewUrlParser: true,
-		useUnifiedTopology: true,
-	})
-
-	client.connect((err) => {
-		if (err) {
-			console.error("Error connecting to MongoDB:", err)
-			return
-		}
-		console.log("Connected to MongoDB")
-	})
-	const db = client.db("test")
-	const collection = db.collection("usercredentials")
-	const filePath = "user.json"
-	fs.readFile(filePath, "utf8", async(err, data) => {
-		if (err) {
-			console.error("Error reading JSON file:", err)
-			return
-		}
-		try {
-			const jsonData = JSON.parse(data)
-			const name = jsonData.name
-			const user = await collection.findOne({ name: name })
+	console.log("inside")
+	console.log(req.user)
+	try{
+			const user = req.user
 			return res.status(200).json({user})
 
-		} catch (parseError) {
-			console.error("Error parsing JSON data:", parseError)
+		} catch (e) {
+			console.error("message", e)
 		}
-	})
-
-
-})
+	});
 
 
 app.get("/getDietPlan",auth, async(req, res) => {

@@ -3,11 +3,10 @@ import "./UserDetails.css"
 import ValueBar from "../ValueBar/ValueBar"
 import axios from "axios"
 import { CircularProgressBar } from "@tomickigrzegorz/react-circular-progress-bar"
+import { useNavigate } from "react-router-dom"
 
 const UserDetails = () => {
-	
-
-
+	const navigate = useNavigate()
 	const config = {
 	id: 0,
   	percent: 0,
@@ -23,9 +22,12 @@ const UserDetails = () => {
 	const [userDetails, setUserDetails] = useState(null)
 	const [loading, setLoading] = useState(true)
 	useEffect(() => {
+		if(!localStorage.getItem("jwt_token")){
+			navigate("/login")
+		}
 		const token = localStorage.getItem("jwt_token")
 		const headers = {
-			Authorization: `Bearer ${token}`,
+			"Authorization": `Bearer ${token}`,
 			"Content-Type": "application/json",
 		}
 		const fetchData = async () => {
@@ -47,7 +49,12 @@ const UserDetails = () => {
 
 	useEffect(()=>{
 		const weekMethod = async () => {
-			const res = await axios.get("http://localhost:3001/getUser") ;
+			const token = localStorage.getItem("jwt_token")
+			const headers = {
+				Authorization: `Bearer ${token}`,
+				"Content-Type": "application/json",
+			}
+			const res = await axios.get("http://localhost:3001/getUser",{headers}) ;
 			const startDate = new Date(res.data.user.menstrualPeriod)
 			const currentDate = new Date()
 			const millisecondsDifference = currentDate - startDate

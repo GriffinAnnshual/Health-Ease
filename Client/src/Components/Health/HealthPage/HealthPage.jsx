@@ -9,15 +9,27 @@ const HealthPage = () => {
 	const handleClick = () => {
 		navigate("/diet")
 	}
+	const handleLogout = () => {
+		localStorage.removeItem("jwt_token")
+		navigate("/login")
+	}
 	// Define a state variable for your data
 	const [data, setData] = useState([])
 	const [loading, setLoading] = useState(true);
 	const [readingsData,setReadings] = useState([]);
 
 	useEffect(() => {
+				if (!localStorage.getItem("jwt_token")) {
+					navigate("/login")
+				}
 		const getUserDetails = async () => {
+			const token = localStorage.getItem("jwt_token")
+			const headers = {
+				Authorization: `Bearer ${token}`,
+				"Content-Type": "application/json",
+			}
 			try {
-				const res = await axios.get("http://localhost:3001/getUserDetails")
+				const res = await axios.get("http://localhost:3001/getUserDetails",{headers})
 				const results = JSON.parse(res.request.response)
 				const result = results.document
 				console.log(result)
@@ -117,7 +129,7 @@ return (
 				className="logo"
 			/>
 			<p class="health-page-head">HEALTH REPORT</p>
-			<p class="health-logout-nav">LOGOUT</p>
+			<p  class="health-logout-nav" onClick={handleLogout}>LOGOUT</p>
 		</div>
 		<div className="health-page-bottom-container">
 			<div className="health-container">
@@ -236,7 +248,11 @@ else{
 					className="logo"
 				/>
 				<p class="health-page-head">HEALTH REPORT</p>
-				<p class="health-logout-nav">LOGOUT</p>
+				<p
+					class="health-logout-nav"
+					onClick={handleLogout}>
+					LOGOUT
+				</p>
 			</div>
 			<div className="health-page-bottom-container">
 				<div className="health-container">

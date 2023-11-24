@@ -14,6 +14,7 @@ const LoginInput = (props) => {
       <div>
         <DatePicker
           className="login-input date-input"
+          autoComplete="true"
           selected={props.value} // Use the provided value as selected
           onChange={handleDateChange}
           placeholderText={props.placeholder}

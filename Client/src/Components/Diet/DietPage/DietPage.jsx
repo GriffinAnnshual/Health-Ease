@@ -6,21 +6,28 @@ import axios from 'axios'
 
 const DietPage = () => {
   const navigate = useNavigate();
+
+  const handleLogout = ()=>{
+	localStorage.removeItem("jwt_token")
+	navigate("/login")
+  }
   const handleClick = () => {
     navigate("/end");
   };
 	const [loading, setLoading] = useState(true)
 	const [newData, setData ] = useState([])
 
-	const token = localStorage.getItem("jwt_token")
-	const headers = {
-		Authorization: `Bearer ${token}`,
-		"Content-Type": "application/json",
-	}
-
 	useEffect(() => {
+		if (!localStorage.getItem("jwt_token")) {
+			navigate("/login")
+		}
 		// Inside useEffect, make the API call and update the data when the component mounts
 		const fetchData = async () => {
+			const token = localStorage.getItem("jwt_token")
+			const headers = {
+				Authorization: `Bearer ${token}`,
+				"Content-Type": "application/json",
+			}
 			try {
 				const res = await axios.get("http://localhost:3001/getDietPlan",{headers});
 				const apiData = res.data.dietPlan;
@@ -43,7 +50,7 @@ const DietPage = () => {
   return (
     <div className="diet-page">
       <div className="diet-page-top-container">
-        <p className="nav-btn diet-nav">LOGOUT</p>
+        <p className="nav-btn diet-nav" onClick={handleLogout}>LOGOUT</p>
         <h1 className="diet-page-header">HEALTHY MOMS, HEALTHY BEGININGS</h1>
       </div>
       <div className="diet-page-bottom-container">
@@ -61,7 +68,11 @@ const DietPage = () => {
     return (
 			<div className="diet-page">
 				<div className="diet-page-top-container">
-					<p className="nav-btn diet-nav">LOGOUT</p>
+					<p
+						className="nav-btn diet-nav"
+						onClick={handleLogout}>
+						LOGOUT
+					</p>
 					<h1 className="diet-page-header">HEALTHY MOMS, HEALTHY BEGININGS</h1>
 				</div>
 				<div className="diet-page-bottom-container">

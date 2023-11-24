@@ -85,6 +85,7 @@
 
 
 .logout-btn-test{
+    z-index:10;
     color: #8A2C2C;
     font-family: 'Montserrat', sans-serif;
     font-size:20px;

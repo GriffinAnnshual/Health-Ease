@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import "./TestingStyles.css";
 import Reading from "./Reading/Reading";
 import Instruction from "./Instruction/Instruction";
@@ -12,8 +12,15 @@ const TestingPage5 = () => {
     navigate("/report");
   };
   const handleLogout = () => {
+    localStorage.removeItem("jwt_token")
     navigate("/login");
   };
+  useEffect(()=>{
+		if (!localStorage.getItem("jwt_token")) {
+			navigate("/login")
+		}
+  },[])
+
 
   return (
     <div class="test-page">
